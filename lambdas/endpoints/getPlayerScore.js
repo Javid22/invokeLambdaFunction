@@ -1,8 +1,17 @@
 const Responses = require('../common/API_Responses')
 const DynamoDB = require('../common/Dynamo')
 const TableName = process.env.tableName
+const { withHooks, withHooksPathValidation } = require('../common/Hooks.js')
+const yup = require('yup')
 
-exports.handler = async (event) => {
+const pathSchema = yup.object().shape({
+    ID: yup.string().required(),
+});
+
+
+
+
+const handler = async (event) => {
     console.log("event params "+ event.pathParameters);
     if(!event.pathParameters || !event.pathParameters.ID){
         //failed without ID
@@ -21,4 +30,6 @@ exports.handler = async (event) => {
     }
 
     return Responses._200(user.score)
-}
+};
+
+exports.handler = withHooksPathValidation({pathSchema})(handler);

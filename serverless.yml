@@ -9,11 +9,9 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:GetItem
-        - dynamodb:PutItem
+        - dynamodb:*
         - ses:*
-      Resource:
-        - arn:aws:dynamodb:us-east-1:891377170373:table/player-points
+      Resource: '*'
 
 plugins:
   - serverless-webpack
@@ -56,6 +54,20 @@ functions:
           path: send-email
           method: post
           CORS: true
+  updatePlayerScore:
+    handler: lambdas/endpoints/updatePlayerScore.handler
+    events:
+      - http:
+          path: update-player-score/{ID}
+          method: post
+          CORS: true
+  pickUsingQuery:
+    handler: lambdas/endpoints/pickUsingQuery.handler
+    events:
+      - http:
+          path: query-player-data/{batsman}
+          method: post
+          CORS: true
 
 resources:
   Resources:
@@ -70,9 +82,19 @@ resources:
         AttributeDefinitions:
           - AttributeName: ID
             AttributeType: S
+          - AttributeName: batsman
+            AttributeType: S
         KeySchema:
           - AttributeName: ID
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: batsman-index
+            KeySchema:
+                - AttributeName: batsman
+                  KeyType: HASH
+            Projection:
+                ProjectionType: ALL
+    
       
 

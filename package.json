@@ -1,0 +1,24 @@
+{
+  "name": "apiGatewayWithWebpack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Javid22/invokeLambdaFunction.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Javid22/invokeLambdaFunction/issues"
+  },
+  "homepage": "https://github.com/Javid22/invokeLambdaFunction#readme",
+  "dependencies": {
+    "lambda-hooks": "^0.2.1",
+    "yup": "^1.4.0"
+  }
+}

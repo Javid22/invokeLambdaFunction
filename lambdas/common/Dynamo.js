@@ -45,7 +45,40 @@ const Dynamo = {
         console.log(userData);
 
         return userData.Item;
-    }
+    },
+
+    update: async ({ tableName, primaryKey, primaryKeyValue, updateKey, updateValue }) => {
+        if (!tableName) {
+            throw new Error('TableName is not provided');
+        }
+        console.log("tableName: " + tableName);
+
+        const params = {
+            TableName: tableName,
+            Key: { [primaryKey]: primaryKeyValue },
+            UpdateExpression: `set ${updateKey} = :updateValue`,
+            ExpressionAttributeValues: {
+                ':updateValue': updateValue,
+            },
+        };
+        console.log("params::".params);
+        return documentClient.update(params).promise();
+    },
+
+    query: async ({ tableName, index, queryKey, queryValue }) => {
+        const params = {
+            TableName: tableName,
+            IndexName: index,
+            KeyConditionExpression: `${queryKey} = :hkey`,
+            ExpressionAttributeValues: {
+                ':hkey': queryValue,
+            },
+        };
+
+        const res = await documentClient.query(params).promise();
+
+        return res.Items || [];
+    },
 }
 
 module.exports = Dynamo;
